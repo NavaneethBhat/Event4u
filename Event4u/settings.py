@@ -116,8 +116,9 @@ TEMPLATE_DIRS = (
     # project and tweak it according to your needs
     os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'allauth'),
     # example project specific templates
-    os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'example')
-)
+    os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'example'),
+    'templates/',
+    )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",

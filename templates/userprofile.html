@@ -1,0 +1,17 @@
+<style>
+#ul
+{
+ color : blue;
+}
+
+</style>
+{% if event_list %}
+    <ul>
+    {% for event in event_list %}
+        <!-- <li><a href="/polls/{{ poll.id }}/">{{ poll.question }}</a></li> -->
+        	{{event}}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
