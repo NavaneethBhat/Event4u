@@ -10,7 +10,12 @@ admin.autodiscover()
 urlpatterns = patterns('',
 	(r'^accounts/', include('allauth.urls')),
 	url(r'^$', TemplateView.as_view(template_name="index.html")),#'django.views.generic.simple.direct_to_template', {'template': 'index.html' }),
-    # url(r'^accounts/profile/$','manager.views.EventCreate', name='event_add'),
+    url(r'^todo/$','manager.views.todo'),
+
+    url(r'^create/$','manager.views.EventCreate', name='event_add'),
+    url(r'^events/(?P<event_id>\d+)/$','manager.views.addTeam', name='team_add'),
+    url(r'^view/(?P<event_id>\d+)/$','manager.views.eventView', name='view_events'),
+    # url(r'^create/add_team$','manager.views.addTeam',{'event_add': 3} name='add_team'),
     # *************edited*************
     # url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),#'django.views.generic.simple.direct_to_template', {'template': 'profile.html' }),
     # url(r'manage/create/$', 'manager.views.EventCreate', name='event_add'),

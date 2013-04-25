@@ -1,0 +1,14 @@
+{% load url from future %}
+
+{% if event_dict %}
+    <ul>
+    {% for event_id , event in event_dict.items %}
+        <li><a href="/events/{{ event_id }}/">{{event}}</a></li>
+ 
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No Events are available.</p>
+{% endif %}
+
+<input type="button" value="Create Event"/><a href="{% url 'event_add' %}" ></input>

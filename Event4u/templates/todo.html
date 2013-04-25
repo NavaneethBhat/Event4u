@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script language="JavaScript" type="text/javascript">
+function taskdone(r)
+{
+var i=r.parentNode.rowIndex;
+var text1="title-"+i;
+//document.getElementById('newTasks').deleteRow(i);
+if(document.getElementById(text1).style.textDecoration=="line-through")
+	document.getElementById(text1).style.textDecoration="none";
+else
+	{
+	document.getElementById(text1).style.textDecoration="line-through";
+	
+	}
+}
+
+function addtask()
+{
+	var temp=document.getElementById("addNewText").value;
+	if(temp!='' && temp!=null)
+	{
+		var table=document.getElementById('newTasks');
+		var tbody=document.getElementsByTagName('tbody')[0];
+		var row=document.createElement('tr');
+		var cell1=document.createElement('td');
+		var cell2=document.createElement('td');
+		cell2.setAttribute("onclick","taskdone(this)");
+		var i=table.rows.length;
+		
+		cell1value='<input type="text" id="title-'+i+'" value="'+temp+'">';
+		var cell2value='';
+		cell2value+='<button class="deleteButton" id="delete-"+i title="Delete Task"><img src="/static/img/done.png"></button>';
+		cell1.innerHTML=cell1value;
+		cell2.innerHTML=cell2value;
+		row.appendChild(cell1);
+		row.appendChild(cell2);
+		tbody.appendChild(row);
+	}
+}
+</script>
+
+<style>
+body
+{
+	background-image:url("/static/img/background.jpg");
+}
+.newTasks{
+	padding:3px;
+	border:1px solid #888;
+  	border-radius:30px;
+	background-image:url("/static/img/notepad.jpg");
+	background-size:100 50;
+	table-layout:fixed;
+	width:1200;
+	height:1100;
+	overflow:scroll;
+	width:200;
+	height:100;
+}
+.newTasks input[type=text] 
+{ 
+	width:300px;
+	background-color: transparent;
+	border:none;
+	font-style:oblique;
+	font-size:18px;
+}
+
+.deleteButton
+{
+	width:100;
+	height:50;
+	background-color:transparent;
+	border:none;
+}
+#addNew
+{
+	border:none;
+	width:50;
+	height:20;
+	margin:50;
+	background:url('/static/img/addTasks.jpg');
+	border-radius:10;
+}
+</style>
+</head>
+
+<body>
+<form action="" method="post"> {% csrf_token %}
+<div>
+<table class="newTasks" id="newTasks">
+<caption><h4 style="color:orange;">LOGISTICS</h4></caption>
+<tbody>
+<tr>
+	<th>Tasks</th>
+	<th>Click on done</th>
+</tr>
+{% for x in items %}
+<tr id="row" >
+<td><input type="text" id="title-"} value= {{x.task_id}} /></td>
+<td onclick="taskdone(this)"><button class="deleteButton" id="delete-" title="Delete Task"><img src="/static/img/done.png"></button></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<!--
+<input type="text" id="addNewText" value="---Enter tasks to add---"/>
+-->
+{{task_form}}
+<input type="submit" id="addNew" value="Add Tasks" onclick=addtask();></input>
+</form>
+</body>
+</html>

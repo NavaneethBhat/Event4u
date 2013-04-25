@@ -18,3 +18,13 @@ class TeamForm(ModelForm):
 	class Meta:
 		model = models.Team
 		exclude = ('team_id','event_id',)
+
+class TaskForm(ModelForm):
+	class Meta:
+		model = models.Task
+		exclude = ('task_id','team',)
+
+class TeamForm(ModelForm):
+	class Meta:
+		model = models.Team
+		exclude = ('team_id','event')

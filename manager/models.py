@@ -26,7 +26,7 @@ class Event(models.Model):
 class Team(models.Model):
 	"""Represents the Teams of actors of Event4u"""
 	team_id = models.AutoField(primary_key=True)
-	event_id = models.ForeignKey(Event)
+	event = models.ForeignKey(Event)
 	team_name = models.CharField(max_length=15)
 	
 	def __unicode__(self):
@@ -36,14 +36,14 @@ class Team(models.Model):
 class Task(models.Model):
 	"""Task to be accomplished by Teams of Event4u"""
 	task_id = models.AutoField(primary_key=True)
-	team_id = models.ForeignKey(Team)
+	team = models.ForeignKey(Team, default= -1 )
 	STATS = (
 		(u'D',u'Done'),
 		(u'I',u'In progress'),
 		(u'N',u'Not Started')
 		)
 	status = models.CharField(max_length=10,choices=STATS,default=u'Not Started')
-	task_descr = models.TextField()
+	task_descr = models.CharField(max_length=70)
 
 	def __unicode__(self):
 		return unicode(self.task_id)
