@@ -22,8 +22,10 @@
 <div class="topmenu">
 <ul>
   <li><a href="create_event.html"><span>Home</span></a></li>
-  <li><a href="event_show.html"><span>Events</span></a></li>
-
+  <li><a href="/accounts/logout/"><span>Log out</span></a></li>
+  <li><form method="post" action="/accounts/logout/"> {% csrf_token %}  
+  <button type="submit">Sign Out</button>
+  </form></li>
 </ul>
 </div>
 
@@ -36,14 +38,14 @@
 {% if event_dict %}
     <ul>
     {% for event_id , event in event_dict.items %}
-        <li><h2><a href="/events/{{ event_id }}/">{{event}}</a></h2></li>
+        <li><h2><a href="/view/teams/{{ event_id }}/">{{event}}</a></h2></li>
  
     {% endfor %}
     </ul>
 {% else %}
     <p><h2>No Events are available.<h2></p>
 {% endif %}
-<li><h2>UYKIFULO</h2></li>
+<!-- <li><h2>UYKIFULO</h2></li> -->
 
 <h2><a href="{% url 'event_add' %}" >Create events</h2>
 <br>

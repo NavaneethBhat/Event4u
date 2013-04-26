@@ -124,7 +124,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'allauth'),
     # example project specific templates
     os.path.join(PROJECT_ROOT, 'templates', 'uniform', 'example'),
-    'templates/',
+    os.path.join(PROJECT_ROOT,'templates'),
     )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

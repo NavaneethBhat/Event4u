@@ -1,0 +1,9 @@
+<fieldset><legend>Add teams</legend>
+    <ul>  
+      {% for x in teams %}
+      	<!-- link =  -->
+      	<a href="/events/todo/{{x.team_id}}"><li>{{x.team_name}}</li>
+      {% endfor %}
+      <a href = "/events/add/{{event_id}}" ><li> Add More </li> </a>
+     </ul>	
+</fieldset>

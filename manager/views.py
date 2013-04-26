@@ -1,5 +1,5 @@
 from django.template import Context, loader
-from manager.models import Event, Role, Team
+from manager.models import Event, Role, Team, Task
 from django.http import HttpResponse
 # from django.core.context_processors import csrf
 from django.shortcuts import render_to_response , redirect
@@ -10,15 +10,21 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from manager.forms import TaskForm, TeamForm
 
+
+from django.contrib.auth import logout
+
+
+
 def NotAuthenticated(request):
 	"""The error module"""
-	return HttpResponse("Pehle, authentication to karlo bhai:)")
+	return HttpResponse("Please log in to view the page.")
 
-def defineRoll(user,event,a_level):
-	""" Create a roll associated with a perticular user """
+def defineRole(user,event,a_level):
+	""" Create a Role associated with a perticular user """
 	# user = User.objects.filter(id = user.pk )
 	role_obj = Role(user_id = user.pk,event_id = event.pk, roles = a_level) #(AUTH_LEVELS = a_level)
 	role_obj.save()
+	print role_obj.roles
 
 def EventCreate(request):
 	"""Event Creation module"""
@@ -26,13 +32,12 @@ def EventCreate(request):
 		if request.method == 'POST': # If the form has been submitted
 			event_form = EventForm(request.POST) # A form bound to the POST data
 			if event_form.is_valid():
-				# event_form.event_creator_id = request.user.pk
 				new_event = event_form.save()
-				defineRoll(request.user,new_event,'E')
+				defineRole(request.user,new_event,'E')
 				# return render_to_response('add_teams.html') # Redirect after POST
 				# return redirect('addTeam', eid = new_event.pk)
 				# addTeam(request , event_id = new_event.pk)
-				url = "/events/"+str(new_event.pk)
+				url = "/events/add/"+str(new_event.pk)
 				return HttpResponseRedirect(url)
 
 		else:
@@ -43,7 +48,7 @@ def EventCreate(request):
 		},context_instance=RequestContext(request))
 	
 	else:
-		return HttpResponse("Pehle, authentication to karlo bhai:)")
+		return render_to_response('errorpage.html')
 
 def showProfile(request):
 	""" Shows an event list with a create event option """
@@ -64,23 +69,36 @@ def showProfile(request):
 		return HttpResponse(template.render(context))
 		
 	else:
-		return HttpResponse("Pehle, authentication to karlo bhai:)")
+		return render_to_response('errorpage.html')
 
-def todo(request):
+def todo(request,team_id): 	#needs fix
 	"""The todo processor"""
+	items = list()
 	if request.user.is_authenticated():
+		item = list()
 		if request.method== 'POST':
 			task_form=TaskForm(request.POST)
 			if task_form.is_valid():
 				task = task_form.save()
-				items = Task.objects.all()
-				return render_to_response("todo.html",{'items':items})
+				task.team_id = team_id
+				task.save()
+				items = Task.objects.filter(team_id = team_id)
+				for i in items:
+					print i.task_descr , i.team_id
+				return render_to_response("todo.html",{'items':items},context_instance=RequestContext(request))
 		else:
+			autherise_level = Role.objects.filter(roles = 'E' or 'T' )
+			my_events = []
+			# for user in autherise_level:
+			# 	my_events.append(user.event_id)
+			items = Task.objects.filter(team_id = team_id)
+			for i in items:
+				print i.task_descr , i.team_id
 			task_form=TaskForm()
-		return render_to_response('todo.html',{'task_form':task_form},context_instance=RequestContext(request))
+		return render_to_response('todo.html',{'task_form':task_form,'items':items},context_instance=RequestContext(request))
 
 	else:
-		return HttpResponse("Pehle, authentication to karlo bhai:)")
+		return render_to_response('errorpage.html')
 
 def addTeam(request , event_id):
 	""" A function to add teams to an authenticated user """
@@ -105,7 +123,49 @@ def addTeam(request , event_id):
 			team_form = TeamForm()
 		return render_to_response('add_teams.html',{'team_form':team_form,'default_teams':default_teams},context_instance=RequestContext(request))
 
-def eventView(request,id_event):
+def eventView(request,event_id):
 	if request.user.is_authenticated():
-		user_role =  Role(user_id = request.user.pk,event_id = id_event)
-		print user_role.roles
+		user_role = Role.objects.filter(user=request.user.pk,event=event_id)
+		for i in user_role:
+			user = i
+			break
+
+		if user.roles=='C':
+			return HttpResponse("Chief's page")
+		elif user.roles=='E':
+			return render_to_response("EventManager.html")
+		elif user.roles=='T':
+			return render_to_response("Teamhead.html")
+		elif user.roles=='V':
+			return render_to_response("Volunteer.html")
+		else:
+			print "Role not defined"
+			return render_to_response("errorpage.html")
+	else:
+		return render_to_response('errorpage.html')
+
+def addTask(request):
+	if request.user.is_authenticated():
+		autherise_level = Role.objects.filter(roles = 'E' or 'T')
+		my_events = []
+		for user in autherise_level:
+			my_events.append(user.event_id)
+		print my_events
+		return HttpResponse("")
+
+def view_teams(request,event_id):
+	if request.user.is_authenticated():
+		uid = request.user.pk
+		eid = event_id
+		teams = Team.objects.filter(event_id = eid)
+		for team in teams:
+			print team.team_name
+		return render_to_response('teams_view.html',{'teams':teams , 'event_id':eid},context_instance=RequestContext(request))
+
+
+	else:
+		return render_to_response('errorpage.html')
+
+def logout_view(request):
+    logout(request)
+    return HttpResponse("Logged out")

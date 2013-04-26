@@ -100,7 +100,7 @@ body
 </tr>
 {% for x in items %}
 <tr id="row" >
-<td><input type="text" id="title-"} value= {{x.task_id}} /></td>
+<td><input type="label" id="title-" style="width:10px;"} value= {{x.task_id}}  /> {{x.task_descr}} </td>
 <td onclick="taskdone(this)"><button class="deleteButton" id="delete-" title="Delete Task"><img src="/static/img/done.png"></button></td>
 </tr>
 {% endfor %}

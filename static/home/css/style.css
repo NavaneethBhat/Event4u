@@ -15,8 +15,10 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 body {
 	width:100%;
 	color: #747d67;
+  height:100%;
 	background: #528036 url(/static/home/images/background.jpg) no-repeat fixed 0 0;
 	font: 15px/21px Arial, Helvetica, sans-serif;
+  background-size: 100% 100%;
 }
 p 
 {
